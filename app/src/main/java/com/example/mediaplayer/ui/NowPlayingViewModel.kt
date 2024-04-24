@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ControlsViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(ControlsUiState())
-    val uiState: StateFlow<ControlsUiState> = _uiState.asStateFlow()
+class NowPlayingViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(NowPlayingUiState())
+    val uiState: StateFlow<NowPlayingUiState> = _uiState.asStateFlow()
 }

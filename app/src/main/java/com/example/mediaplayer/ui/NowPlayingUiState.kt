@@ -1,6 +1,6 @@
 package com.example.mediaplayer.ui
 
-data class ControlsUiState(
+data class NowPlayingUiState(
     val currentSongTitle: String = "",
     val currentSongArtist: String = ""
 )

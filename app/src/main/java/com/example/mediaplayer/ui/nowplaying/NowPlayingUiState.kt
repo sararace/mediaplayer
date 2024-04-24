@@ -1,4 +1,4 @@
-package com.example.mediaplayer.ui
+package com.example.mediaplayer.ui.nowplaying
 
 data class NowPlayingUiState(
     val currentSongTitle: String = "",

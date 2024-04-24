@@ -1,4 +1,4 @@
-package com.example.mediaplayer.ui
+package com.example.mediaplayer.ui.nowplaying
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,4 +1,4 @@
-package com.example.mediaplayer.ui
+package com.example.mediaplayer.ui.nowplaying
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +26,7 @@ import com.example.mediaplayer.ui.theme.MediaPlayerTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NowPlayingScreen(
+    onNavigateToLibrary: () -> Unit,
     nowPlayingViewModel: NowPlayingViewModel = viewModel()
 ) {
     val nowPlayingUiState by nowPlayingViewModel.uiState.collectAsState()
@@ -34,7 +35,7 @@ fun NowPlayingScreen(
             TopAppBar(
                 title = { Text("") },
                 actions = {
-                    IconButton(onClick = { TODO() }) {
+                    IconButton(onClick = { onNavigateToLibrary() }) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.queue_music),
                             contentDescription = ""

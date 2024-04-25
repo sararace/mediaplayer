@@ -21,7 +21,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mediaplayer.R
 import com.example.mediaplayer.ui.theme.MediaPlayerTheme
 
@@ -30,7 +29,7 @@ import com.example.mediaplayer.ui.theme.MediaPlayerTheme
 fun NowPlayingScreen(
     onNavigateToLibrary: () -> Unit,
     mediaPlayer: MediaPlayer?,
-    nowPlayingViewModel: NowPlayingViewModel = viewModel()
+    nowPlayingViewModel: NowPlayingViewModel
 ) {
     val nowPlayingUiState by nowPlayingViewModel.uiState.collectAsState(NowPlayingUiState())
     val nowPlayingFilename by nowPlayingViewModel.currentSongFile.collectAsState(initial = "")

@@ -2,6 +2,7 @@ package com.example.mediaplayer.repository
 
 import android.content.res.AssetManager
 import android.media.MediaMetadataRetriever
+import android.util.Log
 import com.example.mediaplayer.model.Song
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ class SongRepository(assets: AssetManager) {
     }
 
     private suspend fun populateSongs(assets: AssetManager) {
+        Log.d("SongRepository", "populating songs")
         val assetList = assets.list("")
         val songList = mutableListOf<Song>()
         if (assetList != null) {

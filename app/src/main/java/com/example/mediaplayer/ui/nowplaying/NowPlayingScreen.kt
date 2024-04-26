@@ -1,8 +1,14 @@
 package com.example.mediaplayer.ui.nowplaying
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,10 +21,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mediaplayer.R
 import com.example.mediaplayer.ui.theme.MediaPlayerTheme
@@ -30,9 +36,6 @@ fun NowPlayingScreen(
     nowPlayingViewModel: NowPlayingViewModel
 ) {
     val nowPlayingUiState by nowPlayingViewModel.uiState.collectAsState(NowPlayingUiState())
-
-    val assets = LocalContext.current.assets
-    nowPlayingViewModel.playSong(nowPlayingUiState.currentSongFilename, assets)
 
     Scaffold(
         topBar = {
@@ -59,6 +62,12 @@ fun NowPlayingScreen(
                 title = nowPlayingUiState.currentSongTitle,
                 artist = nowPlayingUiState.currentSongArtist
             )
+            Spacer(modifier = Modifier.height(24.dp))
+            Controls(
+                isPlaying = nowPlayingUiState.isPlaying,
+                nowPlayingViewModel::pause,
+                nowPlayingViewModel::resume
+            )
         }
     }
 }
@@ -83,6 +92,41 @@ fun NowPlaying(
             fontSize = 14.sp
         )
     }
+}
+
+@Composable
+fun Controls(
+    isPlaying: Boolean,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
+//    onPrevious: () -> Unit,
+//    onNext: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier
+    ) {
+        if (isPlaying) {
+            IconButton(onClick = { onPause() }) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.pause),
+                    contentDescription = ""
+                )
+            }
+        } else {
+            IconButton(onClick = { onResume() }) {
+                Icon(Icons.Filled.PlayArrow, "")
+            }
+        }
+    }
+}
+
+@Composable
+fun Modes(
+    modifier: Modifier = Modifier
+) {
+
 }
 
 @Preview(showBackground = true)

@@ -1,7 +1,5 @@
 package com.example.mediaplayer
 
-import android.media.AudioAttributes
-import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,18 +18,8 @@ import com.example.mediaplayer.ui.theme.MediaPlayerTheme
 
 class MainActivity : ComponentActivity() {
 
-    private var mediaPlayer: MediaPlayer? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mediaPlayer = MediaPlayer().apply {
-            setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .build()
-            )
-        }
 
         setContent {
             MediaPlayerTheme {
@@ -48,7 +36,7 @@ class MainActivity : ComponentActivity() {
                             NowPlayingScreen(
                                 onNavigateToLibrary = {
                                     navController.navigate("library")
-                                }, mediaPlayer = mediaPlayer,
+                                },
                                 nowPlayingViewModel = viewModel
                             )
                         }
@@ -61,11 +49,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        mediaPlayer?.release()
-        mediaPlayer = null
-        super.onDestroy()
     }
 }

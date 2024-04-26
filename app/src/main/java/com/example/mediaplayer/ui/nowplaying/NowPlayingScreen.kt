@@ -1,6 +1,5 @@
 package com.example.mediaplayer.ui.nowplaying
 
-import android.media.MediaPlayer
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,21 +27,12 @@ import com.example.mediaplayer.ui.theme.MediaPlayerTheme
 @Composable
 fun NowPlayingScreen(
     onNavigateToLibrary: () -> Unit,
-    mediaPlayer: MediaPlayer?,
     nowPlayingViewModel: NowPlayingViewModel
 ) {
     val nowPlayingUiState by nowPlayingViewModel.uiState.collectAsState(NowPlayingUiState())
-    val nowPlayingFilename by nowPlayingViewModel.currentSongFile.collectAsState(initial = "")
 
-    val context = LocalContext.current
-
-    if (mediaPlayer?.isPlaying == false && nowPlayingFilename.isNotEmpty()) {
-        val fd = context.assets.openFd(nowPlayingFilename)
-        mediaPlayer.setDataSource(fd.fileDescriptor, fd.startOffset, fd.length)
-        fd.close()
-        mediaPlayer.prepare()
-        mediaPlayer.start()
-    }
+    val assets = LocalContext.current.assets
+    nowPlayingViewModel.playSong(nowPlayingUiState.currentSongFilename, assets)
 
     Scaffold(
         topBar = {
@@ -65,7 +55,7 @@ fun NowPlayingScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CurrentlyPlaying(
+            NowPlaying(
                 title = nowPlayingUiState.currentSongTitle,
                 artist = nowPlayingUiState.currentSongArtist
             )
@@ -74,7 +64,7 @@ fun NowPlayingScreen(
 }
 
 @Composable
-fun CurrentlyPlaying(
+fun NowPlaying(
     title: String,
     artist: String,
     modifier: Modifier = Modifier
@@ -99,6 +89,6 @@ fun CurrentlyPlaying(
 @Composable
 fun CurrentlyPlayingPreview() {
     MediaPlayerTheme {
-        CurrentlyPlaying("Life Is a Highway", "Rascal Flatts")
+        NowPlaying("Life Is a Highway", "Rascal Flatts")
     }
 }

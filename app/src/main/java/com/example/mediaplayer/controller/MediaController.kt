@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MediaController(
@@ -23,6 +24,7 @@ class MediaController(
                 .setUsage(AudioAttributes.USAGE_MEDIA)
                 .build()
         )
+        setOnCompletionListener { onSongComplete() }
     }
 
     // song order
@@ -49,6 +51,13 @@ class MediaController(
         }
     }
 
+    private fun onSongComplete() {
+        mediaPlayer.reset()
+        if (currentSongIndex.value <= playlist.value.size) {
+            currentSongIndex.update { it + 1 }
+        }
+    }
+
     fun pause() {
         mediaPlayer.pause()
         isPlaying.value = false
@@ -57,5 +66,19 @@ class MediaController(
     fun resume() {
         mediaPlayer.start()
         isPlaying.value = true
+    }
+
+    fun previous() {
+        mediaPlayer.reset()
+        if (currentSongIndex.value >= 1) {
+            currentSongIndex.update { it - 1 }
+        }
+    }
+
+    fun next() {
+        mediaPlayer.reset()
+        if (currentSongIndex.value <= playlist.value.size) {
+            currentSongIndex.update { it + 1 }
+        }
     }
 }

@@ -66,7 +66,9 @@ fun NowPlayingScreen(
             Controls(
                 isPlaying = nowPlayingUiState.isPlaying,
                 nowPlayingViewModel::pause,
-                nowPlayingViewModel::resume
+                nowPlayingViewModel::resume,
+                nowPlayingViewModel::previous,
+                nowPlayingViewModel::next
             )
         }
     }
@@ -99,14 +101,20 @@ fun Controls(
     isPlaying: Boolean,
     onPause: () -> Unit,
     onResume: () -> Unit,
-//    onPrevious: () -> Unit,
-//    onNext: () -> Unit,
+    onPrevious: () -> Unit,
+    onNext: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = modifier
     ) {
+        IconButton(onClick = { onPrevious() }) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.skip_previous),
+                contentDescription = ""
+            )
+        }
         if (isPlaying) {
             IconButton(onClick = { onPause() }) {
                 Icon(
@@ -118,6 +126,12 @@ fun Controls(
             IconButton(onClick = { onResume() }) {
                 Icon(Icons.Filled.PlayArrow, "")
             }
+        }
+        IconButton(onClick = { onNext() }) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.skip_next),
+                contentDescription = ""
+            )
         }
     }
 }

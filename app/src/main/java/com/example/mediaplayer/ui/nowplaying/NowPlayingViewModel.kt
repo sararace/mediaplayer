@@ -24,6 +24,14 @@ class NowPlayingViewModel(
         mediaController.resume()
     }
 
+    fun previous() {
+        mediaController.previous()
+    }
+
+    fun next() {
+        mediaController.next()
+    }
+
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")

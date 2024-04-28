@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class SongRepository(assets: AssetManager) {
 
-    val songs: MutableStateFlow<List<Song>> = MutableStateFlow(listOf())
+    val songs: MutableStateFlow<List<Song>> = MutableStateFlow(emptyList())
     private val retriever = MediaMetadataRetriever()
 
     init {
@@ -35,12 +35,24 @@ class SongRepository(assets: AssetManager) {
                     Song(
                         title ?: "",
                         artist ?: "",
-                        duration ?: 0,
+                        formatDuration(duration),
                         filename
                     )
                 )
             }
         }
         songs.emit(songList)
+    }
+
+    private fun formatDuration(duration: Long?): String {
+        if (duration == null) return ""
+        val totalSeconds = duration/1000
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return if (seconds < 10) {
+            "$minutes:0$seconds"
+        } else {
+            "$minutes:$seconds"
+        }
     }
 }

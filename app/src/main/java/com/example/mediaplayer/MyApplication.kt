@@ -6,12 +6,13 @@ import com.example.mediaplayer.repository.SongRepository
 
 class MyApplication : Application() {
 
+    lateinit var songRepository: SongRepository
     lateinit var mediaController: MediaController
 
     override fun onCreate() {
         super.onCreate()
 
-        val songRepository = SongRepository(assets)
+        songRepository = SongRepository(assets)
         mediaController = MediaController(songRepository, assets)
     }
 }

@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mediaplayer.ui.library.LibraryScreen
+import com.example.mediaplayer.ui.library.LibraryViewModel
 import com.example.mediaplayer.ui.nowplaying.NowPlayingScreen
 import com.example.mediaplayer.ui.nowplaying.NowPlayingViewModel
 import com.example.mediaplayer.ui.theme.MediaPlayerTheme
@@ -41,9 +42,13 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("library") {
-                            LibraryScreen(onNavigateToNowPlaying = {
-                                navController.navigate("nowplaying")
-                            })
+                            val viewModel: LibraryViewModel by viewModels { LibraryViewModel.Factory }
+                            LibraryScreen(
+                                onNavigateToNowPlaying = {
+                                    navController.navigate("nowplaying")
+                                },
+                                libraryViewModel = viewModel
+                            )
                         }
                     }
                 }

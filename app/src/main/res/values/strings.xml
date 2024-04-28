@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Media Player</string>
     <string name="library">Library</string>
+    <string name="song_title">Song title</string>
+    <string name="artist">Artist</string>
+    <string name="track_length">Track length</string>
 </resources>

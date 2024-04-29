@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -62,6 +65,15 @@ fun NowPlayingScreen(
             NowPlaying(
                 title = nowPlayingUiState.currentSongTitle,
                 artist = nowPlayingUiState.currentSongArtist
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Modes(
+                isShuffled = nowPlayingUiState.isShuffled,
+                isRepeatAll = nowPlayingUiState.isRepeatAll,
+                isRepeatOne = nowPlayingUiState.isRepeatOne,
+                nowPlayingViewModel::shuffle,
+                nowPlayingViewModel::repeatAll,
+                nowPlayingViewModel::repeatOne
             )
             Spacer(modifier = Modifier.height(24.dp))
             Controls(
@@ -115,25 +127,34 @@ fun Controls(
         IconButton(onClick = { onPrevious() }) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.skip_previous),
-                contentDescription = ""
+                contentDescription = "",
+                modifier = Modifier.size(48.dp)
             )
         }
+        Spacer(modifier = Modifier.width(24.dp))
         if (isPlaying) {
             IconButton(onClick = { onPause() }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.pause),
-                    contentDescription = ""
+                    contentDescription = "",
+                    modifier = Modifier.size(48.dp)
                 )
             }
         } else {
             IconButton(onClick = { onResume() }) {
-                Icon(Icons.Filled.PlayArrow, "")
+                Icon(
+                    imageVector = Icons.Filled.PlayArrow,
+                    contentDescription = "",
+                    modifier = Modifier.size(48.dp)
+                )
             }
         }
+        Spacer(modifier = Modifier.width(24.dp))
         IconButton(onClick = { onNext() }) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.skip_next),
-                contentDescription = ""
+                contentDescription = "",
+                modifier = Modifier.size(48.dp)
             )
         }
     }
@@ -141,9 +162,45 @@ fun Controls(
 
 @Composable
 fun Modes(
+    isShuffled: Boolean,
+    isRepeatAll: Boolean,
+    isRepeatOne: Boolean,
+    onShuffle: () -> Unit,
+    onRepeatAll: () -> Unit,
+    onRepeatOne: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
+    Row(
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        modifier = modifier
+    ) {
+        IconButton(onClick = { onShuffle() }) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.shuffle),
+                contentDescription = "",
+                modifier = Modifier.size(48.dp),
+                tint = if (isShuffled) Color.Blue else Color.Black
+            )
+        }
+        Spacer(modifier = Modifier.width(24.dp))
+        IconButton(onClick = { onRepeatAll() }) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.repeat),
+                contentDescription = "",
+                modifier = Modifier.size(48.dp),
+                tint = if (isRepeatAll) Color.Blue else Color.Black
+            )
+        }
+        Spacer(modifier = Modifier.width(24.dp))
+        IconButton(onClick = { onRepeatOne() }) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.repeat_one),
+                contentDescription = "",
+                modifier = Modifier.size(48.dp),
+                tint = if (isRepeatOne) Color.Blue else Color.Black
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -151,5 +208,32 @@ fun Modes(
 fun CurrentlyPlayingPreview() {
     MediaPlayerTheme {
         NowPlaying("Life Is a Highway", "Rascal Flatts")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ControlsPreview() {
+    MediaPlayerTheme {
+        Controls(
+            isPlaying = true,
+            onPause = { },
+            onResume = { },
+            onPrevious = { },
+            onNext = { })
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ModesPreview() {
+    MediaPlayerTheme {
+        Modes(
+            onShuffle = { },
+            onRepeatAll = { },
+            onRepeatOne = { },
+            isShuffled = true,
+            isRepeatAll = false,
+            isRepeatOne = false)
     }
 }

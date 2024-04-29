@@ -33,7 +33,6 @@ class MediaController(
     private val playlist = MutableStateFlow<List<Song>>(emptyList())
     private val currentSongIndex = MutableStateFlow(0)
 
-    val isPlaying = MutableStateFlow(false) //playing if true, paused if false
     val currentSong = combine(playlist, currentSongIndex) { songList, index ->
         songList[index]
     }
@@ -57,7 +56,6 @@ class MediaController(
             if (!mediaPlayer.isPlaying && filename.isNotEmpty()) {
                 prepareSong(filename)
                 mediaPlayer.start()
-                isPlaying.emit(true)
             }
         }
     }
@@ -87,29 +85,33 @@ class MediaController(
 
     fun pause() {
         mediaPlayer.pause()
-        isPlaying.value = false
     }
 
     fun resume() {
         mediaPlayer.start()
-        isPlaying.value = true
     }
 
     fun previous() {
+        val isPlaying = mediaPlayer.isPlaying
         mediaPlayer.reset()
         if (currentSongIndex.value >= 1) {
             val newSongIndex = currentSongIndex.updateAndGet { it - 1 }
-            if (isPlaying.value) {
+            if (isPlaying) {
                 playSong(newSongIndex)
+            } else {
+                coroutineScope.launch {
+                    prepareSong(newSongIndex)
+                }
             }
         }
     }
 
     fun next() {
+        val isPlaying = mediaPlayer.isPlaying
         mediaPlayer.reset()
         if (currentSongIndex.value <= playlist.value.size) {
             val newSongIndex = currentSongIndex.updateAndGet { it + 1 }
-            if (isPlaying.value) {
+            if (isPlaying) {
                 playSong(newSongIndex)
             } else {
                 coroutineScope.launch {

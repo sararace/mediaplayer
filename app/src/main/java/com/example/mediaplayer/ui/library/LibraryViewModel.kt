@@ -3,14 +3,24 @@ package com.example.mediaplayer.ui.library
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.mediaplayer.MyApplication
-import com.example.mediaplayer.repository.SongRepository
+import com.example.mediaplayer.model.Song
+import com.example.mediaplayer.util.SongRetriever
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class LibraryViewModel(
-    songRepository: SongRepository
+    songRetriever: SongRetriever
 ) : ViewModel() {
-    val songs = songRepository.songs
+    val songs = MutableStateFlow<List<Song>>(emptyList())
+
+    init {
+        viewModelScope.launch {
+            songs.emit(songRetriever.getSongs())
+        }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
@@ -21,7 +31,7 @@ class LibraryViewModel(
             ): T {
                 val application = checkNotNull(extras[APPLICATION_KEY])
                 return LibraryViewModel(
-                    (application as MyApplication).songRepository
+                    (application as MyApplication).songRetriever
                 ) as T
             }
         }

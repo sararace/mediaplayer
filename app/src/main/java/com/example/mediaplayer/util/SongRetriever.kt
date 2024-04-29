@@ -1,26 +1,16 @@
-package com.example.mediaplayer.repository
+package com.example.mediaplayer.util
 
 import android.content.res.AssetManager
 import android.media.MediaMetadataRetriever
 import android.util.Log
 import com.example.mediaplayer.model.Song
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
-class SongRepository(assets: AssetManager) {
+class SongRetriever(private val assets: AssetManager) {
 
-    val songs: MutableStateFlow<List<Song>> = MutableStateFlow(emptyList())
     private val retriever = MediaMetadataRetriever()
 
-    init {
-        CoroutineScope(SupervisorJob() + Dispatchers.Default).launch { populateSongs(assets) }
-    }
-
-    private suspend fun populateSongs(assets: AssetManager) {
-        Log.d("SongRepository", "populating songs")
+    fun getSongs() : List<Song> {
+        Log.d("SongRetriever", "populating songs")
         val assetList = assets.list("")
         val songList = mutableListOf<Song>()
         if (assetList != null) {
@@ -41,7 +31,7 @@ class SongRepository(assets: AssetManager) {
                 )
             }
         }
-        songs.emit(songList)
+        return songList
     }
 
     private fun formatDuration(duration: Long?): String {

@@ -3,9 +3,7 @@ A simple prototype of a media player app
 
 # Choices
 Dependency Injection:
-By declaring MediaPlayer as a variable in MediaPlayer, it is created once and can
-be accessed by both screens. This is a simple form of dependency injection.
-
-For SongRepository, it needed to be a parameter to the viewModel, not the view. So
-instead a Factory was used inside the viewModel to be able to inject the
-repository directly.
+MediaController and SongRetriever are initialized in the Application class and dependency injection
+is used to pass them as parameters to the viewModels. I could have used a library like Dagger or
+Koin which would make more sense on a larger scale project, but for this small project, I used a
+Factory inside the viewModel to be able to inject the repository directly.

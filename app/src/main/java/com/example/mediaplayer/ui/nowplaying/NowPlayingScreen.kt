@@ -72,7 +72,7 @@ fun NowPlayingScreen(
                 isRepeatAll = nowPlayingUiState.isRepeatAll,
                 isRepeatOne = nowPlayingUiState.isRepeatOne,
                 nowPlayingViewModel::toggleShuffle,
-                nowPlayingViewModel::repeatAll,
+                nowPlayingViewModel::toggleRepeatAll,
                 nowPlayingViewModel::repeatOne
             )
             Spacer(modifier = Modifier.height(24.dp))

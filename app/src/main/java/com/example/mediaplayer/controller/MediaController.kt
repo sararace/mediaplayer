@@ -38,6 +38,9 @@ class MediaController(
         songList[index]
     }
 
+    var isRepeatAll = false
+    var isRepeatOne = false
+
     init {
         coroutineScope.launch {
             val defaultPlaylist = songRetriever.getSongs()
@@ -77,7 +80,9 @@ class MediaController(
 
     private fun onSongComplete() {
         mediaPlayer.reset()
-        if (currentSongIndex.value <= playlist.value.size) {
+        if (isRepeatOne) {
+            playSong(currentSongIndex.value)
+        } else if (currentSongIndex.value <= playlist.value.size) {
             currentSongIndex.updateAndGet { it + 1 }.also {
                 playSong(it)
             }
@@ -94,29 +99,39 @@ class MediaController(
 
     fun previous() {
         val isPlaying = mediaPlayer.isPlaying
-        mediaPlayer.reset()
-        if (currentSongIndex.value >= 1) {
-            val newSongIndex = currentSongIndex.updateAndGet { it - 1 }
-            if (isPlaying) {
-                playSong(newSongIndex)
-            } else {
-                coroutineScope.launch {
-                    prepareSong(newSongIndex)
-                }
-            }
+        val newSongIndex = if (isRepeatOne) {
+            currentSongIndex.value
+        } else if (currentSongIndex.value >= 1) {
+            currentSongIndex.value - 1
+        } else {
+            null
         }
+        skipToSong(isPlaying, newSongIndex)
     }
 
     fun next() {
         val isPlaying = mediaPlayer.isPlaying
-        mediaPlayer.reset()
-        if (currentSongIndex.value <= playlist.value.size) {
-            val newSongIndex = currentSongIndex.updateAndGet { it + 1 }
+        val newSongIndex = if (isRepeatOne) {
+            currentSongIndex.value
+        } else if (currentSongIndex.value < playlist.value.size - 1) {
+            currentSongIndex.value + 1
+        } else if (isRepeatAll) {
+            0
+        } else {
+            null
+        }
+        skipToSong(isPlaying, newSongIndex)
+    }
+
+    private fun skipToSong(isPlaying: Boolean, index: Int?) {
+        if (index != null) {
+            currentSongIndex.value = index
+            mediaPlayer.reset()
             if (isPlaying) {
-                playSong(newSongIndex)
+                playSong(index)
             } else {
                 coroutineScope.launch {
-                    prepareSong(newSongIndex)
+                    prepareSong(index)
                 }
             }
         }

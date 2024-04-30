@@ -22,3 +22,5 @@ Some behaviors were not specified in the specifications so I made my own assumpt
 1. For the mode buttons, I made these toggle buttons. I wanted the user to be able to undo and get back to the original state in case they clicked accidentally.
 2. Logically, repeat one and repeat all cannot be enabled at the same time.
 3. The shuffle button restarts the playlist due to simplicity. Production-level media players might move the current song to the start of the shuffled list instead so as not to interrupt playback.
+4. With repeat all enabled, the next button will go from the end of the playlist to the start, but the previous button will not wrap from the beginning of the playlist to the end.
+5. When next is pressed on the last song or previous is pressed on the first song, nothing happens (unless next is pressed on the last song while repeat all is enabled, then it goes to the first song)

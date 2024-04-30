@@ -67,20 +67,30 @@ class NowPlayingViewModel(
         }
     }
 
-    fun repeatAll() {
+    fun toggleRepeatAll() {
+        val state = _uiState.value
+        val repeatAll = !state.isRepeatAll
+        val repeatOne = if (!state.isRepeatAll) false else state.isRepeatOne
+        mediaController.isRepeatAll = repeatAll
+        mediaController.isRepeatOne = repeatOne
         _uiState.update { currentState ->
             currentState.copy(
-                isRepeatAll = !currentState.isRepeatAll,
-                isRepeatOne = if (!currentState.isRepeatAll) false else currentState.isRepeatOne
+                isRepeatAll = repeatAll,
+                isRepeatOne = repeatOne
             )
         }
     }
 
     fun repeatOne() {
+        val state = _uiState.value
+        val repeatOne = !state.isRepeatOne
+        val repeatAll = if (!state.isRepeatOne) false else state.isRepeatAll
+        mediaController.isRepeatOne = repeatOne
+        mediaController.isRepeatAll = repeatAll
         _uiState.update { currentState ->
             currentState.copy(
-                isRepeatOne = !currentState.isRepeatOne,
-                isRepeatAll = if (!currentState.isRepeatOne) false else currentState.isRepeatAll
+                isRepeatOne = repeatOne,
+                isRepeatAll = repeatAll
             )
         }
     }

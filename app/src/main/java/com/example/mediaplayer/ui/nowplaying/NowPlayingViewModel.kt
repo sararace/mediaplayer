@@ -58,7 +58,8 @@ class NowPlayingViewModel(
         mediaController.next()
     }
 
-    fun shuffle() {
+    fun toggleShuffle() {
+        mediaController.toggleShuffle(!_uiState.value.isShuffled)
         _uiState.update { currentState ->
             currentState.copy(
                 isShuffled = !currentState.isShuffled

@@ -71,7 +71,7 @@ fun NowPlayingScreen(
                 isShuffled = nowPlayingUiState.isShuffled,
                 isRepeatAll = nowPlayingUiState.isRepeatAll,
                 isRepeatOne = nowPlayingUiState.isRepeatOne,
-                nowPlayingViewModel::shuffle,
+                nowPlayingViewModel::toggleShuffle,
                 nowPlayingViewModel::repeatAll,
                 nowPlayingViewModel::repeatOne
             )

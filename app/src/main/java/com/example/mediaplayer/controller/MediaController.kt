@@ -11,11 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 
 class MediaController(
-    songRetriever: SongRetriever,
+    private val songRetriever: SongRetriever,
     private val assets: AssetManager
 ) {
     private var mediaPlayer: MediaPlayer = MediaPlayer().apply {
@@ -117,6 +118,26 @@ class MediaController(
                 coroutineScope.launch {
                     prepareSong(newSongIndex)
                 }
+            }
+        }
+    }
+
+    fun toggleShuffle(shuffle: Boolean) {
+        val isPlaying = mediaPlayer.isPlaying
+        mediaPlayer.reset()
+        coroutineScope.launch {
+            playlist.update {
+                if (shuffle) {
+                    it.shuffled()
+                } else {
+                    songRetriever.getSongs()
+                }
+            }
+            currentSongIndex.emit(0)
+            if (isPlaying) {
+                playSong(0)
+            } else {
+                prepareSong(0)
             }
         }
     }
